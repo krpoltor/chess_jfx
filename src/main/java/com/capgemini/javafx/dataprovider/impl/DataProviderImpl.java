@@ -2,6 +2,7 @@ package com.capgemini.javafx.dataprovider.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -32,14 +33,20 @@ public class DataProviderImpl implements DataProvider {
 		String login = userId;
 		String name = userFirstName;
 		String surname = userLastName;
-		if (login == null || login.isEmpty()) {
+		if (login == null) {
 			login = "";
+		} else if (login.isEmpty()) {
+			login = "*";
 		}
-		if (name == null || name.isEmpty()) {
+		if (name == null) {
 			name = "";
+		} else if (name.isEmpty()) {
+			name = "*";
 		}
-		if (surname == null || surname.isEmpty()) {
+		if (surname == null) {
 			surname = "";
+		} else if (surname.isEmpty()) {
+			surname = "*";
 		}
 
 		String query = String.format("login=%s&name=%s&surname=%s", URLEncoder.encode(login, charset),
@@ -64,7 +71,7 @@ public class DataProviderImpl implements DataProvider {
 	}
 
 	@Override
-	public Boolean deleteUser(UserVO deleteUser) throws IOException {
+	public Boolean deleteUser(UserVO deleteUser) {
 		LOG.debug("Entering deleteUser()");
 
 		// String url = "http://localhost:8090/user/";
@@ -84,22 +91,65 @@ public class DataProviderImpl implements DataProvider {
 		// String responseBody = scanner.useDelimiter("\\A").next();
 		// scanner.close();
 
-		URL url = new URL("http://localhost:8090/user/" + deleteUser.getId());
-		HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
-		httpCon.setDoOutput(true);
-		httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		httpCon.setRequestMethod("DELETE");
-		httpCon.connect();
-
-		// System.out.println(responseBody);
-		// response.close();
-		int response = httpCon.getResponseCode();
 		Boolean result = false;
-		if (response == 200) {
-			result = true;
+		try {
+			URL url = new URL("http://localhost:8090/user/" + deleteUser.getId());
+			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+			httpCon.setDoOutput(true);
+			httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			httpCon.setRequestMethod("DELETE");
+			httpCon.connect();
+
+			// System.out.println(responseBody);
+			// response.close();
+
+			httpCon.disconnect();
+			if (httpCon.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + httpCon.getResponseCode());
+			} else {
+				result = true;
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		LOG.debug("Leaving deleteUser()");
 		return result;
+	}
+
+	@Override
+	public void updateUser(UserVO updatedUser) {
+		LOG.debug("Entering updateUser()");
+
+		try {
+			URL url = new URL("http://localhost:8090/user/");
+			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+
+			httpCon.setRequestMethod("PUT");
+			httpCon.setDoInput(true);
+			httpCon.setDoOutput(true);
+			httpCon.setRequestProperty("Content-Type", "application/json");
+
+			OutputStream out = httpCon.getOutputStream();
+
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonInString = mapper.writeValueAsString(updatedUser);
+
+			out.write(jsonInString.getBytes());
+			out.close();
+
+			httpCon.getInputStream();
+
+			httpCon.disconnect();
+			if (httpCon.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + httpCon.getResponseCode());
+			}
+			// System.out.println(responseBody);
+			// response.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		LOG.debug("Leaving updateUser()");
 	}
 
 }

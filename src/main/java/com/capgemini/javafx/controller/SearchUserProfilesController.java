@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import com.capgemini.javafx.context.Context;
 import com.capgemini.javafx.controller.model.UserSearch;
 import com.capgemini.javafx.dataprovider.DataProvider;
 import com.capgemini.javafx.dataprovider.data.UserVO;
@@ -59,7 +60,7 @@ public class SearchUserProfilesController {
 	@FXML
 	private TableColumn<UserVO, String> userEmailColumn;
 	
-	private UserVO selectedUser = new UserVO();
+	private UserVO selectedUser =  new UserVO();
 
 	public UserVO getSelectedUser() {
 		return selectedUser;
@@ -121,7 +122,7 @@ public class SearchUserProfilesController {
 				LOG.debug(newValue + " selected");
 				
 				setSelectedUser(newValue);
-
+				Context.getInstance().setUser(newValue);
 			}
 		});
 	}

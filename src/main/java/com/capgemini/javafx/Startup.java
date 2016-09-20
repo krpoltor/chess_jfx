@@ -3,8 +3,6 @@ package com.capgemini.javafx;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import com.capgemini.javafx.dataprovider.data.UserVO;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

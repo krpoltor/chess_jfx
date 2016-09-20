@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -12,8 +13,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
 	prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="com.capgemini.javafx.controller.EditUserProfileController"
-	>
+	fx:controller="com.capgemini.javafx.controller.EditUserProfileController">
 	<children>
 		<GridPane layoutX="33.0" layoutY="49.0" prefHeight="502.0"
 			prefWidth="734.0">
@@ -38,8 +38,10 @@
 					prefHeight="83.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="106.0" minHeight="10.0"
 					prefHeight="94.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="214.0" minHeight="10.0"
+					prefHeight="211.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="172.0" minHeight="10.0"
-					prefHeight="167.0" vgrow="SOMETIMES" />
+					prefHeight="57.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
 				<Label fx:id="userIdLabel" alignment="CENTER" text="%label.userId" />
@@ -74,6 +76,12 @@
 					GridPane.rowIndex="3" />
 				<TextField fx:id="userEmailTextField"
 					GridPane.columnIndex="1" GridPane.rowIndex="3" />
+				<Button fx:id="saveButton" contentDisplay="LEFT" alignment="CENTER"
+					mnemonicParsing="false" onAction="#saveButtonAction" text="%button.save"
+					GridPane.columnIndex="3" GridPane.rowIndex="6" />
+				<Button fx:id="cancelButton" contentDisplay="RIGHT"
+					alignment="CENTER" mnemonicParsing="false" onAction="#cancelButtonAction"
+					text="%button.cancel" GridPane.columnIndex="3" GridPane.rowIndex="7" />
 			</children>
 		</GridPane>
 	</children>
