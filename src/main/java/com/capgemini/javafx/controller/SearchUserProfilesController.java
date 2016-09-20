@@ -19,6 +19,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -57,6 +58,16 @@ public class SearchUserProfilesController {
 	private TableColumn<UserVO, String> userLastNameColumn;
 	@FXML
 	private TableColumn<UserVO, String> userEmailColumn;
+	
+	private UserVO selectedUser = new UserVO();
+
+	public UserVO getSelectedUser() {
+		return selectedUser;
+	}
+
+	public void setSelectedUser(UserVO selectedUser) {
+		this.selectedUser = selectedUser;
+	}
 
 	private final DataProvider dataProvider = DataProvider.INSTANCE;
 
@@ -86,6 +97,10 @@ public class SearchUserProfilesController {
 				.bind(userIdInputText.textProperty().isEmpty().and(userFirstNameInputText.textProperty().isEmpty())
 						.and(userLastNameInputText.textProperty().isEmpty()));
 
+		editProfileButton.disableProperty().bind(model.resultProperty().emptyProperty());
+		
+		deleteProfileButton.disableProperty().bind(model.resultProperty().emptyProperty());
+
 	}
 
 	private void initializeResultTable() {
@@ -104,6 +119,8 @@ public class SearchUserProfilesController {
 			@Override
 			public void changed(ObservableValue<? extends UserVO> observable, UserVO oldValue, UserVO newValue) {
 				LOG.debug(newValue + " selected");
+				
+				setSelectedUser(newValue);
 
 			}
 		});
@@ -143,11 +160,12 @@ public class SearchUserProfilesController {
 			stage.show();
 
 			// hide this current window (if this is whant you want
-//			 ((Node)(event.getSource())).getScene().getWindow().hide();
+			 ((Node)(event.getSource())).getScene().getWindow().hide();
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	/**
@@ -160,6 +178,7 @@ public class SearchUserProfilesController {
 	@FXML
 	private void deleteProfileButtonAction(ActionEvent event) {
 		LOG.debug("'DeleteProfile' button clicked");
+		deleteUser();
 	}
 
 	/**
@@ -222,6 +241,73 @@ public class SearchUserProfilesController {
 				 * Reset sorting in the result table.
 				 */
 				foundUsersTable.getSortOrder().clear();
+			}
+		};
+
+		/*
+		 * Start the background task. In real life projects some framework
+		 * manages background tasks. You should never create a thread on your
+		 * own.
+		 */
+		new Thread(backgroundTask).start();
+	}
+	
+	private void deleteUser() {
+		/*
+		 * Use task to execute the potentially long running call in background
+		 * (separate thread), so that the JavaFX Application Thread is not
+		 * blocked.
+		 */
+		Task<Boolean> backgroundTask = new Task<Boolean>() {
+
+			/**
+			 * This method will be executed in a background thread.
+			 */
+			@Override
+			protected Boolean call() throws Exception {
+				LOG.debug("call() called");
+				
+				UserVO deleteUser = getSelectedUser();
+
+				/*
+				 * Get the data.
+				 */
+//				Collection<UserVO> result = dataProvider.findUsers( //
+//						model.getUserId(), //
+//						model.getUserFirstName(), //
+//						model.getUserLastName());
+				Boolean result = dataProvider.deleteUser(deleteUser);
+
+				/*
+				 * Value returned from this method is stored as a result of task
+				 * execution.
+				 */
+				// return null;
+				return result;
+			}
+
+			/**
+			 * This method will be executed in the JavaFX Application Thread
+			 * when the task finishes.
+			 */
+			@Override
+			protected void succeeded() {
+				LOG.debug("succeeded() called");
+
+				/*
+				 * Get result of the task execution.
+				 */
+//				Collection<UserVO> result = getValue();
+
+				/*
+				 * Copy the result to model.
+				 */
+//				model.setResult(new ArrayList<UserVO>(result));
+
+				/*
+				 * Reset sorting in the result table.
+				 */
+//				foundUsersTable.getSortOrder().clear();
 			}
 		};
 

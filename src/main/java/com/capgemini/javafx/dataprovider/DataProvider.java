@@ -24,4 +24,6 @@ public interface DataProvider {
 	 */
 	Collection<UserVO> findUsers(String userId, String userFirstName, String userLastName) throws IOException;
 
+	Boolean deleteUser(UserVO deleteUser) throws IOException;
+
 }

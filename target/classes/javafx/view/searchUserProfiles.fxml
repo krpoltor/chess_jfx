@@ -14,8 +14,7 @@
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
 	prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="com.capgemini.javafx.controller.SearchUserProfilesController"
-	>
+	fx:controller="com.capgemini.javafx.controller.SearchUserProfilesController">
 	<children>
 		<GridPane fx:id="inputGrid" layoutX="32.0" layoutY="58.0"
 			prefHeight="90.0" prefWidth="371.0" AnchorPane.bottomAnchor="452.0"
@@ -41,8 +40,7 @@
 					GridPane.rowIndex="1" />
 				<Label fx:id="userLastNameLabel" text="%label.userLastName"
 					GridPane.rowIndex="2" />
-				<TextField fx:id="userIdInputText"
-					GridPane.columnIndex="1" />
+				<TextField fx:id="userIdInputText" GridPane.columnIndex="1" />
 				<TextField fx:id="userFirstNameInputText"
 					GridPane.columnIndex="1" GridPane.rowIndex="1" />
 				<TextField fx:id="userLastNameInputText"
@@ -52,21 +50,18 @@
 		<Button fx:id="searchButton" layoutX="431.0" layoutY="88.0"
 			mnemonicParsing="false" text="%button.search"
 			AnchorPane.bottomAnchor="481.0" AnchorPane.leftAnchor="431.0"
-			AnchorPane.rightAnchor="244.0" AnchorPane.topAnchor="88.0" 
-			onAction="#searchButtonAction"
-			/>
+			AnchorPane.rightAnchor="244.0" AnchorPane.topAnchor="88.0"
+			onAction="#searchButtonAction" />
 		<Button fx:id="deleteProfileButton" layoutX="400.0" layoutY="538.0"
 			mnemonicParsing="false" text="%button.deleteProfile"
 			AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="400.0"
-			AnchorPane.rightAnchor="236.0" AnchorPane.topAnchor="538.0" 
-			onAction="#deleteProfileButtonAction"
-			/>
+			AnchorPane.rightAnchor="236.0" AnchorPane.topAnchor="538.0"
+			onAction="#deleteProfileButtonAction" />
 		<Button fx:id="editProfileButton" layoutX="611.0" layoutY="538.0"
 			mnemonicParsing="false" text="%button.editProfile"
 			AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="611.0"
-			AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="538.0" 
-			onAction="#editProfileButtonAction"
-			/>
+			AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="538.0"
+			onAction="#editProfileButtonAction" />
 		<TableView fx:id="foundUsersTable" layoutX="24.0" layoutY="161.0"
 			prefHeight="370.0" prefWidth="750.0" AnchorPane.bottomAnchor="70.0"
 			AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0"

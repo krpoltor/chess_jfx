@@ -9,41 +9,71 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+	prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.capgemini.javafx.controller.EditUserProfileController"
+	>
 	<children>
-		<GridPane layoutX="33.0" layoutY="49.0" prefHeight="502.0" prefWidth="734.0">
+		<GridPane layoutX="33.0" layoutY="49.0" prefHeight="502.0"
+			prefWidth="734.0">
 			<columnConstraints>
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="133.0" />
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="473.0" minWidth="10.0" prefWidth="214.0" />
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="419.0" minWidth="10.0" prefWidth="135.0" />
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="419.0" minWidth="10.0" prefWidth="262.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0"
+					minWidth="10.0" prefWidth="133.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="473.0"
+					minWidth="10.0" prefWidth="214.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="419.0"
+					minWidth="10.0" prefWidth="135.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="419.0"
+					minWidth="10.0" prefWidth="262.0" />
 			</columnConstraints>
 			<rowConstraints>
-				<RowConstraints maxHeight="67.0" minHeight="10.0" prefHeight="67.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="107.0" minHeight="10.0" prefHeight="72.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="108.0" minHeight="10.0" prefHeight="83.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="108.0" minHeight="10.0" prefHeight="83.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="106.0" minHeight="10.0" prefHeight="94.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="172.0" minHeight="10.0" prefHeight="167.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="67.0" minHeight="10.0"
+					prefHeight="67.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="107.0" minHeight="10.0"
+					prefHeight="72.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="108.0" minHeight="10.0"
+					prefHeight="83.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="108.0" minHeight="10.0"
+					prefHeight="83.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="106.0" minHeight="10.0"
+					prefHeight="94.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="172.0" minHeight="10.0"
+					prefHeight="167.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
 				<Label fx:id="userIdLabel" alignment="CENTER" text="%label.userId" />
-				<TextField fx:id="userIdTextField" editable="false" GridPane.columnIndex="1" />
-				<TextField fx:id="userFirstNameTextField" prefHeight="31.0" prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-				<Label fx:id="userFirstNameLabel" alignment="CENTER" text="%label.userFirstName" GridPane.rowIndex="1" />
-				<TextField fx:id="userLastNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-				<Label fx:id="userLastNameLabel" alignment="CENTER" text="%label.userLastName" GridPane.rowIndex="2" />
-				<Label fx:id="userPasswordLabel" alignment="CENTER" text="%label.userPassword" GridPane.rowIndex="4" />
-				<TextField fx:id="userPasswordTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-				<Label fx:id="userAboutMeLabel" alignment="CENTER" text="%label.userAboutMe" GridPane.rowIndex="5" />
-				<TextArea fx:id="userAboutMeTextField" prefHeight="79.0" prefWidth="202.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-				<Label fx:id="userLifeMottoLabel" alignment="CENTER_RIGHT" text="%label.userLifeMotto" GridPane.columnIndex="2" GridPane.rowIndex="5">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets></Label>
-				<TextArea fx:id="userLifeMottoTextField" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-				<Label fx:id="userEmailLabel" alignment="CENTER" text="%label.userEmail" GridPane.rowIndex="3" />
-				<TextField fx:id="userEmailTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+				<TextField fx:id="userIdTextField" editable="false"
+					GridPane.columnIndex="1" />
+				<TextField fx:id="userFirstNameTextField" prefHeight="31.0"
+					prefWidth="260.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+				<Label fx:id="userFirstNameLabel" alignment="CENTER"
+					text="%label.userFirstName" GridPane.rowIndex="1" />
+				<TextField fx:id="userLastNameTextField"
+					GridPane.columnIndex="1" GridPane.rowIndex="2" />
+				<Label fx:id="userLastNameLabel" alignment="CENTER"
+					text="%label.userLastName" GridPane.rowIndex="2" />
+				<Label fx:id="userPasswordLabel" alignment="CENTER"
+					text="%label.userPassword" GridPane.rowIndex="4" />
+				<TextField fx:id="userPasswordTextField"
+					GridPane.columnIndex="1" GridPane.rowIndex="4" />
+				<Label fx:id="userAboutMeLabel" alignment="CENTER" text="%label.userAboutMe"
+					GridPane.rowIndex="5" />
+				<TextArea fx:id="userAboutMeTextField" prefHeight="79.0"
+					prefWidth="202.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+				<Label fx:id="userLifeMottoLabel" alignment="CENTER_RIGHT"
+					text="%label.userLifeMotto" GridPane.columnIndex="2"
+					GridPane.rowIndex="5">
+					<opaqueInsets>
+						<Insets />
+					</opaqueInsets>
+				</Label>
+				<TextArea fx:id="userLifeMottoTextField" prefHeight="200.0"
+					prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+				<Label fx:id="userEmailLabel" alignment="CENTER" text="%label.userEmail"
+					GridPane.rowIndex="3" />
+				<TextField fx:id="userEmailTextField"
+					GridPane.columnIndex="1" GridPane.rowIndex="3" />
 			</children>
 		</GridPane>
 	</children>
