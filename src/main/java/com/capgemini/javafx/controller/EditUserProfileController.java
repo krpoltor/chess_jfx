@@ -1,10 +1,12 @@
 package com.capgemini.javafx.controller;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import com.capgemini.javafx.alerthelper.AlertHelper;
 import com.capgemini.javafx.context.Context;
 import com.capgemini.javafx.dataprovider.DataProvider;
 import com.capgemini.javafx.dataprovider.data.UserVO;
@@ -16,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -45,6 +48,8 @@ public class EditUserProfileController {
 
 	private final DataProvider dataProvider = DataProvider.INSTANCE;
 
+	private final AlertHelper alertHelper = AlertHelper.INSTANCE;
+
 	private UserVO selectedUser;
 
 	@FXML
@@ -56,10 +61,11 @@ public class EditUserProfileController {
 		selectedUser = Context.getInstance().currentUser();
 
 		initializeInputFields();
-
 	}
 
 	private void initializeInputFields() {
+		LOG.debug("Initialize input fields");
+		
 		userIdTextField.setText(selectedUser.getLogin());
 		userFirstNameTextField.setText(selectedUser.getName());
 		userLastNameTextField.setText(selectedUser.getSurname());
@@ -67,6 +73,8 @@ public class EditUserProfileController {
 		userAboutMeTextField.setText(selectedUser.getAboutMe());
 		userEmailTextField.setText(selectedUser.getEmail());
 		userLifeMottoTextField.setText(selectedUser.getLifeMotto());
+		
+		LOG.debug("Exit initialise intput fields");
 	}
 
 	@FXML
@@ -75,6 +83,7 @@ public class EditUserProfileController {
 
 		UserVO updatedUser = new UserVO();
 		updatedUser.setId(selectedUser.getId());
+
 		updatedUser.setLogin(userIdTextField.getText());
 		updatedUser.setName(userFirstNameTextField.getText());
 		updatedUser.setSurname(userLastNameTextField.getText());
@@ -83,30 +92,26 @@ public class EditUserProfileController {
 		updatedUser.setAboutMe(userAboutMeTextField.getText());
 		updatedUser.setLifeMotto(userLifeMottoTextField.getText());
 
-		dataProvider.updateUser(updatedUser);
+		Optional<ButtonType> result = alertHelper.showConfirmationAlert("Confirm", "Hey...", "...are you sure?");
 
-		((Node) (event.getSource())).getScene().getWindow().hide();
-
-		try {
-			Parent root = FXMLLoader.load(
-					getClass().getClassLoader().getResource("javafx/view/searchUserProfiles.fxml"), //
-					ResourceBundle.getBundle("javafx/bundle/base"));
-			Stage stage = new Stage();
-			stage.setTitle("Search player profiles");
-			stage.setScene(new Scene(root, 800, 600));
-			stage.show();
-
-			// hide this current window (if this is whant you want
-			// ((Node)(event.getSource())).getScene().getWindow().hide();
-
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (result.get() == ButtonType.OK) {
+			// user chose OK
+			dataProvider.updateUser(updatedUser);
+			// show main window
+			showSearchUserProfilesWindow(event);
 		}
-
+		LOG.debug("Exiting saveButtonAction");
 	}
 
 	@FXML
 	public void cancelButtonAction(ActionEvent event) {
+		LOG.debug("'Cancel' button clicked!");
+		showSearchUserProfilesWindow(event);
+		LOG.debug("Exiting cancelButtonAction");
+
+	}
+
+	private void showSearchUserProfilesWindow(ActionEvent event) {
 		try {
 			Parent root = FXMLLoader.load(
 					getClass().getClassLoader().getResource("javafx/view/searchUserProfiles.fxml"), //
@@ -121,7 +126,6 @@ public class EditUserProfileController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }

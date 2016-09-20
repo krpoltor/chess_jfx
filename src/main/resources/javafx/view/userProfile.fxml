@@ -76,7 +76,7 @@
 					GridPane.rowIndex="3" />
 				<TextField fx:id="userEmailTextField"
 					GridPane.columnIndex="1" GridPane.rowIndex="3" />
-				<Button fx:id="saveButton" contentDisplay="LEFT" alignment="CENTER"
+				<Button fx:id="saveButton" defaultButton="true" contentDisplay="LEFT" alignment="CENTER"
 					mnemonicParsing="false" onAction="#saveButtonAction" text="%button.save"
 					GridPane.columnIndex="3" GridPane.rowIndex="6" />
 				<Button fx:id="cancelButton" contentDisplay="RIGHT"

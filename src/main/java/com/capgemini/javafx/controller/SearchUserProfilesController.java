@@ -4,15 +4,18 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import com.capgemini.javafx.alerthelper.AlertHelper;
 import com.capgemini.javafx.context.Context;
 import com.capgemini.javafx.controller.model.UserSearch;
 import com.capgemini.javafx.dataprovider.DataProvider;
 import com.capgemini.javafx.dataprovider.data.UserVO;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -24,6 +27,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -59,18 +64,12 @@ public class SearchUserProfilesController {
 	private TableColumn<UserVO, String> userLastNameColumn;
 	@FXML
 	private TableColumn<UserVO, String> userEmailColumn;
-	
-	private UserVO selectedUser =  new UserVO();
-
-	public UserVO getSelectedUser() {
-		return selectedUser;
-	}
-
-	public void setSelectedUser(UserVO selectedUser) {
-		this.selectedUser = selectedUser;
-	}
+	@FXML
+	private ProgressBar searchProgressBar;
 
 	private final DataProvider dataProvider = DataProvider.INSTANCE;
+
+	private final AlertHelper alertHelper = AlertHelper.INSTANCE;
 
 	private final UserSearch model = new UserSearch();
 
@@ -91,6 +90,8 @@ public class SearchUserProfilesController {
 
 		foundUsersTable.itemsProperty().bind(model.resultProperty());
 
+		searchProgressBar.setProgress(0);
+
 		/*
 		 * Make the Search button inactive when the input fields are empty.
 		 */
@@ -98,9 +99,13 @@ public class SearchUserProfilesController {
 				.bind(userIdInputText.textProperty().isEmpty().and(userFirstNameInputText.textProperty().isEmpty())
 						.and(userLastNameInputText.textProperty().isEmpty()));
 
-		editProfileButton.disableProperty().bind(model.resultProperty().emptyProperty());
-		
-		deleteProfileButton.disableProperty().bind(model.resultProperty().emptyProperty());
+		// Disable edit and delete buttons when no row is selected
+
+		editProfileButton.disableProperty()
+				.bind(Bindings.isEmpty(foundUsersTable.getSelectionModel().getSelectedCells()));
+
+		deleteProfileButton.disableProperty()
+				.bind(Bindings.isEmpty(foundUsersTable.getSelectionModel().getSelectedCells()));
 
 	}
 
@@ -120,8 +125,7 @@ public class SearchUserProfilesController {
 			@Override
 			public void changed(ObservableValue<? extends UserVO> observable, UserVO oldValue, UserVO newValue) {
 				LOG.debug(newValue + " selected");
-				
-				setSelectedUser(newValue);
+
 				Context.getInstance().setUser(newValue);
 			}
 		});
@@ -135,9 +139,11 @@ public class SearchUserProfilesController {
 	 *            {@link ActionEvent} holding information about this event
 	 */
 	@FXML
-	private void searchButtonAction(ActionEvent event) {
+	private void searchButtonAction() {
 		LOG.debug("'Search' button clicked");
+		searchProgressBar.setProgress(10);
 		searchForUsers();
+		searchProgressBar.setProgress(100);
 	}
 
 	/**
@@ -150,23 +156,20 @@ public class SearchUserProfilesController {
 	@FXML
 	private void editProfileButtonAction(ActionEvent event) {
 		LOG.debug("'EditProfile' button clicked");
-		
+
 		try {
 			Parent root1 = FXMLLoader.load(getClass().getClassLoader().getResource("javafx/view/userProfile.fxml"), //
 					ResourceBundle.getBundle("javafx/bundle/base"));
 			Stage stage = new Stage();
 			stage.setTitle("Edit Profile");
-//			stage.setTitle("%label.formTitle");
 			stage.setScene(new Scene(root1));
 			stage.show();
 
-			// hide this current window (if this is whant you want
-			 ((Node)(event.getSource())).getScene().getWindow().hide();
-
+			// hide this current window
+			((Node) (event.getSource())).getScene().getWindow().hide();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	/**
@@ -179,7 +182,17 @@ public class SearchUserProfilesController {
 	@FXML
 	private void deleteProfileButtonAction(ActionEvent event) {
 		LOG.debug("'DeleteProfile' button clicked");
-		deleteUser();
+		Optional<ButtonType> result = alertHelper.showConfirmationAlert("Deleting", "",
+				"Are you sure you want to delete this user?");
+		if (result.get() == ButtonType.OK) {
+			deleteUser();
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			searchButtonAction();
+		}
 	}
 
 	/**
@@ -196,14 +209,13 @@ public class SearchUserProfilesController {
 		 * blocked.
 		 */
 		Task<Collection<UserVO>> backgroundTask = new Task<Collection<UserVO>>() {
-
 			/**
 			 * This method will be executed in a background thread.
 			 */
 			@Override
 			protected Collection<UserVO> call() throws Exception {
 				LOG.debug("call() called");
-
+				searchProgressBar.setProgress(40);
 				/*
 				 * Get the data.
 				 */
@@ -211,12 +223,12 @@ public class SearchUserProfilesController {
 						model.getUserId(), //
 						model.getUserFirstName(), //
 						model.getUserLastName());
-
 				/*
 				 * Value returned from this method is stored as a result of task
 				 * execution.
 				 */
 				// return null;
+				searchProgressBar.setProgress(80);
 				return result;
 			}
 
@@ -227,24 +239,20 @@ public class SearchUserProfilesController {
 			@Override
 			protected void succeeded() {
 				LOG.debug("succeeded() called");
-
 				/*
 				 * Get result of the task execution.
 				 */
 				Collection<UserVO> result = getValue();
-
 				/*
 				 * Copy the result to model.
 				 */
 				model.setResult(new ArrayList<UserVO>(result));
-
 				/*
 				 * Reset sorting in the result table.
 				 */
 				foundUsersTable.getSortOrder().clear();
 			}
 		};
-
 		/*
 		 * Start the background task. In real life projects some framework
 		 * manages background tasks. You should never create a thread on your
@@ -252,7 +260,7 @@ public class SearchUserProfilesController {
 		 */
 		new Thread(backgroundTask).start();
 	}
-	
+
 	private void deleteUser() {
 		/*
 		 * Use task to execute the potentially long running call in background
@@ -260,30 +268,21 @@ public class SearchUserProfilesController {
 		 * blocked.
 		 */
 		Task<Boolean> backgroundTask = new Task<Boolean>() {
-
 			/**
 			 * This method will be executed in a background thread.
 			 */
 			@Override
 			protected Boolean call() throws Exception {
 				LOG.debug("call() called");
-				
-				UserVO deleteUser = getSelectedUser();
-
+				UserVO deleteUser = Context.getInstance().currentUser();
 				/*
 				 * Get the data.
 				 */
-//				Collection<UserVO> result = dataProvider.findUsers( //
-//						model.getUserId(), //
-//						model.getUserFirstName(), //
-//						model.getUserLastName());
 				Boolean result = dataProvider.deleteUser(deleteUser);
-
 				/*
 				 * Value returned from this method is stored as a result of task
 				 * execution.
 				 */
-				// return null;
 				return result;
 			}
 
@@ -294,24 +293,8 @@ public class SearchUserProfilesController {
 			@Override
 			protected void succeeded() {
 				LOG.debug("succeeded() called");
-
-				/*
-				 * Get result of the task execution.
-				 */
-//				Collection<UserVO> result = getValue();
-
-				/*
-				 * Copy the result to model.
-				 */
-//				model.setResult(new ArrayList<UserVO>(result));
-
-				/*
-				 * Reset sorting in the result table.
-				 */
-//				foundUsersTable.getSortOrder().clear();
 			}
 		};
-
 		/*
 		 * Start the background task. In real life projects some framework
 		 * manages background tasks. You should never create a thread on your
@@ -319,5 +302,4 @@ public class SearchUserProfilesController {
 		 */
 		new Thread(backgroundTask).start();
 	}
-
 }

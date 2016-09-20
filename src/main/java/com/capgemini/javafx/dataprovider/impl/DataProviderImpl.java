@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
+import com.capgemini.javafx.alerthelper.AlertHelper;
 import com.capgemini.javafx.dataprovider.DataProvider;
 import com.capgemini.javafx.dataprovider.data.UserVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DataProviderImpl implements DataProvider {
 
 	private static final Logger LOG = Logger.getLogger(DataProviderImpl.class);
+
+	private final AlertHelper alertHelper = AlertHelper.INSTANCE;
 
 	public DataProviderImpl() {
 	}
@@ -74,23 +77,6 @@ public class DataProviderImpl implements DataProvider {
 	public Boolean deleteUser(UserVO deleteUser) {
 		LOG.debug("Entering deleteUser()");
 
-		// String url = "http://localhost:8090/user/";
-		// String charset = "UTF-8";
-		//
-		// String id = String.valueOf(deleteUser.getId());
-		//
-		// String query = String.format("id=%s", URLEncoder.encode(id,
-		// charset));
-		//
-		// URLConnection connection = new URL(url + "?" +
-		// query).openConnection();
-		// connection.setRequestProperty("Accept-Charset", charset);
-		// InputStream response = connection.getInputStream();
-		//
-		// Scanner scanner = new Scanner(response);
-		// String responseBody = scanner.useDelimiter("\\A").next();
-		// scanner.close();
-
 		Boolean result = false;
 		try {
 			URL url = new URL("http://localhost:8090/user/" + deleteUser.getId());
@@ -99,9 +85,6 @@ public class DataProviderImpl implements DataProvider {
 			httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			httpCon.setRequestMethod("DELETE");
 			httpCon.connect();
-
-			// System.out.println(responseBody);
-			// response.close();
 
 			httpCon.disconnect();
 			if (httpCon.getResponseCode() != 200) {
@@ -142,13 +125,22 @@ public class DataProviderImpl implements DataProvider {
 
 			httpCon.disconnect();
 			if (httpCon.getResponseCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : " + httpCon.getResponseCode());
+
+				alertHelper.showErrorAlert("Error!", "Ooops, there was an error!",
+						"Error code: " + httpCon.getResponseCode());
+
+				// throw new RuntimeException("Failed : HTTP error code : " +
+				// httpCon.getResponseCode());
+
+			} else {
+				alertHelper.showInformationAlert("Information Dialog", "Look, an Information Dialog", "Done!");
 			}
 			// System.out.println(responseBody);
 			// response.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		LOG.debug("Leaving updateUser()");
 	}
 
