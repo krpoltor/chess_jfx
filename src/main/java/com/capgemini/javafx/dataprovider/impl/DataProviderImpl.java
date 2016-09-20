@@ -50,6 +50,7 @@ public class DataProviderImpl implements DataProvider {
 
 		Scanner scanner = new Scanner(response);
 		String responseBody = scanner.useDelimiter("\\A").next();
+		scanner.close();
 		// System.out.println(responseBody);
 
 		ObjectMapper mapper = new ObjectMapper();
