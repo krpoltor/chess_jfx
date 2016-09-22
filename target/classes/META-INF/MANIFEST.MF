@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Implementation-Title: chess
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: KRPOLTOR
+Built-By: krpoltor
 Implementation-Vendor-Id: com.capgemini.chess
 Build-Jdk: 1.8.0_66
 Created-By: Maven Integration for Eclipse

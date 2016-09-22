@@ -65,7 +65,7 @@ public class EditUserProfileController {
 
 	private void initializeInputFields() {
 		LOG.debug("Initialize input fields");
-		
+
 		userIdTextField.setText(selectedUser.getLogin());
 		userFirstNameTextField.setText(selectedUser.getName());
 		userLastNameTextField.setText(selectedUser.getSurname());
@@ -73,7 +73,7 @@ public class EditUserProfileController {
 		userAboutMeTextField.setText(selectedUser.getAboutMe());
 		userEmailTextField.setText(selectedUser.getEmail());
 		userLifeMottoTextField.setText(selectedUser.getLifeMotto());
-		
+
 		LOG.debug("Exit initialise intput fields");
 	}
 
@@ -112,6 +112,7 @@ public class EditUserProfileController {
 	}
 
 	private void showSearchUserProfilesWindow(ActionEvent event) {
+		LOG.debug("Entered showSearchUserProfilesWindow()");
 		try {
 			Parent root = FXMLLoader.load(
 					getClass().getClassLoader().getResource("javafx/view/searchUserProfiles.fxml"), //
@@ -126,6 +127,7 @@ public class EditUserProfileController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		LOG.debug("Exiting showSearchUserProfilesWindow()");
 	}
 
 }

@@ -17,7 +17,7 @@ public class UserSearch {
 	private final StringProperty userFirstName = new SimpleStringProperty();
 	private final StringProperty userLastName = new SimpleStringProperty();
 	private final StringProperty userEmail = new SimpleStringProperty();
-	
+
 	private final ListProperty<UserVO> result = new SimpleListProperty<>(
 			FXCollections.observableList(new ArrayList<>()));
 
@@ -68,7 +68,7 @@ public class UserSearch {
 	public StringProperty userEmailProperty() {
 		return userEmail;
 	}
-	
+
 	public final List<UserVO> getResult() {
 		return result.get();
 	}

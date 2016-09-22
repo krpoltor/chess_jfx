@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Collection;
-import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
@@ -59,13 +58,8 @@ public class DataProviderImpl implements DataProvider {
 		connection.setRequestProperty("Accept-Charset", charset);
 		InputStream response = connection.getInputStream();
 
-		Scanner scanner = new Scanner(response);
-		String responseBody = scanner.useDelimiter("\\A").next();
-		scanner.close();
-		// System.out.println(responseBody);
-
 		ObjectMapper mapper = new ObjectMapper();
-		Collection<UserVO> result = mapper.readValue(responseBody,
+		Collection<UserVO> result = mapper.readValue(response,
 				mapper.getTypeFactory().constructCollectionType(Collection.class, UserVO.class));
 
 		response.close();
@@ -87,17 +81,22 @@ public class DataProviderImpl implements DataProvider {
 			httpCon.connect();
 
 			httpCon.disconnect();
-			if (httpCon.getResponseCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : " + httpCon.getResponseCode());
-			} else {
-				result = true;
-			}
+			reactOnResponseCodeStatus(httpCon);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		LOG.debug("Leaving deleteUser()");
 		return result;
+	}
+
+	private void reactOnResponseCodeStatus(HttpURLConnection httpCon) throws IOException {
+		if (httpCon.getResponseCode() != 200) {
+			alertHelper.showErrorAlert("Error!", "Ooops, there was an error!",
+					"Error code: " + httpCon.getResponseCode());
+		} else {
+			alertHelper.showInformationAlert("Information", "", "Done!");
+		}
 	}
 
 	@Override
@@ -124,24 +123,10 @@ public class DataProviderImpl implements DataProvider {
 			httpCon.getInputStream();
 
 			httpCon.disconnect();
-			if (httpCon.getResponseCode() != 200) {
-
-				alertHelper.showErrorAlert("Error!", "Ooops, there was an error!",
-						"Error code: " + httpCon.getResponseCode());
-
-				// throw new RuntimeException("Failed : HTTP error code : " +
-				// httpCon.getResponseCode());
-
-			} else {
-				alertHelper.showInformationAlert("Information Dialog", "Look, an Information Dialog", "Done!");
-			}
-			// System.out.println(responseBody);
-			// response.close();
+			reactOnResponseCodeStatus(httpCon);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		LOG.debug("Leaving updateUser()");
 	}
-
 }

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -18,12 +19,17 @@
 	fx:controller="com.capgemini.javafx.controller.SearchUserProfilesController">
 	<children>
 		<GridPane fx:id="inputGrid" layoutX="32.0" layoutY="58.0"
-			prefHeight="90.0" prefWidth="371.0" AnchorPane.bottomAnchor="452.0"
-			AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="397.0"
-			AnchorPane.topAnchor="58.0">
+			maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+			minWidth="-Infinity" prefHeight="90.0" prefWidth="600.0"
+			AnchorPane.bottomAnchor="452.0" AnchorPane.leftAnchor="32.0"
+			AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="58.0">
 			<columnConstraints>
 				<ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0"
 					minWidth="10.0" prefWidth="157.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="403.0"
+					minWidth="10.0" prefWidth="214.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="403.0"
+					minWidth="10.0" prefWidth="214.0" />
 				<ColumnConstraints hgrow="SOMETIMES" maxWidth="403.0"
 					minWidth="10.0" prefWidth="214.0" />
 			</columnConstraints>
@@ -46,41 +52,64 @@
 					GridPane.columnIndex="1" GridPane.rowIndex="1" />
 				<TextField fx:id="userLastNameInputText"
 					GridPane.columnIndex="1" GridPane.rowIndex="2" />
+				<Button fx:id="searchButton" defaultButton="true"
+					mnemonicParsing="false" onAction="#searchButtonAction" prefHeight="31.0"
+					prefWidth="139.0" text="%button.search" GridPane.columnIndex="3"
+					GridPane.rowIndex="1" />
 			</children>
 		</GridPane>
-		<Button fx:id="searchButton" defaultButton="true" layoutX="431.0" layoutY="88.0"
-			mnemonicParsing="false" onAction="#searchButtonAction" text="%button.search"
-			AnchorPane.bottomAnchor="481.0" AnchorPane.leftAnchor="431.0"
-			AnchorPane.rightAnchor="244.0" AnchorPane.topAnchor="88.0" />
-		<Button fx:id="deleteProfileButton" layoutX="400.0" layoutY="538.0"
-			mnemonicParsing="false" onAction="#deleteProfileButtonAction" text="%button.deleteProfile"
-			AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="400.0"
-			AnchorPane.rightAnchor="236.0" AnchorPane.topAnchor="538.0" />
-		<Button fx:id="editProfileButton" layoutX="611.0" layoutY="538.0"
-			mnemonicParsing="false" onAction="#editProfileButtonAction" text="%button.editProfile"
-			AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="611.0"
-			AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="538.0" />
-		<TableView fx:id="foundUsersTable" layoutX="24.0" layoutY="161.0"
-			prefHeight="370.0" prefWidth="750.0" AnchorPane.bottomAnchor="70.0"
+		<ScrollPane layoutX="25.0" layoutY="160.0" maxHeight="-Infinity"
+			maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+			AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="25.0"
+			AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="160.0">
+			<content>
+				<TableView fx:id="foundUsersTable" prefHeight="370.0"
+					prefWidth="750.0">
+					<columns>
+						<TableColumn fx:id="userIdColumn" editable="false"
+							prefWidth="125.0" text="%column.userLogin" />
+						<TableColumn fx:id="userFirstNameColumn" editable="false"
+							prefWidth="180.0" text="%column.userFirstName" />
+						<TableColumn fx:id="userLastNameColumn" editable="false"
+							prefWidth="179.0" text="%column.userLastName" />
+						<TableColumn fx:id="userEmailColumn" editable="false"
+							maxWidth="1.7976931348623157E308" prefWidth="265.0" text="%column.email" />
+					</columns>
+					<rotationAxis>
+						<Point3D x="1.0" />
+					</rotationAxis>
+				</TableView>
+			</content>
+		</ScrollPane>
+		<GridPane layoutX="25.0" layoutY="541.0" maxHeight="-Infinity"
+			maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+			prefHeight="45.0" prefWidth="750.0" AnchorPane.bottomAnchor="14.0"
 			AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0"
-			AnchorPane.topAnchor="160.0">
-			<columns>
-				<TableColumn fx:id="userIdColumn" editable="false"
-					prefWidth="125.0" text="%column.userLogin" />
-				<TableColumn fx:id="userFirstNameColumn" editable="false"
-					prefWidth="180.0" text="%column.userFirstName" />
-				<TableColumn fx:id="userLastNameColumn" editable="false"
-					prefWidth="179.0" text="%column.userLastName" />
-				<TableColumn fx:id="userEmailColumn" editable="false"
-					maxWidth="1.7976931348623157E308" prefWidth="265.0" text="%column.email" />
-			</columns>
-			<rotationAxis>
-				<Point3D x="1.0" />
-			</rotationAxis>
-		</TableView>
-		<ProgressBar fx:id="searchProgressBar" layoutX="25.0"
-			layoutY="538.0" prefHeight="31.0" prefWidth="350.0" progress="0.0"
-			AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="25.0"
-			AnchorPane.rightAnchor="425.0" AnchorPane.topAnchor="538.0" />
+			AnchorPane.topAnchor="541.0">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="376.0"
+					minWidth="10.0" prefWidth="376.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0"
+					minWidth="0.0" prefWidth="15.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="201.0"
+					minWidth="10.0" prefWidth="165.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0"
+					minWidth="10.0" prefWidth="165.0" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints minHeight="10.0" prefHeight="30.0"
+					vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<Button fx:id="deleteProfileButton" mnemonicParsing="false"
+					onAction="#deleteProfileButtonAction" text="%button.deleteProfile"
+					GridPane.columnIndex="2" />
+				<Button fx:id="editProfileButton" mnemonicParsing="false"
+					onAction="#editProfileButtonAction" text="%button.editProfile"
+					GridPane.columnIndex="3" />
+				<ProgressBar fx:id="searchProgressBar" prefHeight="31.0"
+					prefWidth="364.0" progress="0.0" />
+			</children>
+		</GridPane>
 	</children>
 </AnchorPane>
